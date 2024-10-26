@@ -106,8 +106,9 @@ void UpdateSignupScreen() {
 void DrawSignupScreen() {
     ClearBackground(RAYWHITE);
 
-    // Vẽ nền màu xanh lá cây
-    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){0, 128, 0, 255}); // Màu xanh lá cây
+    // Vẽ nền đen
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){ 0, 0, 0, 255}); // Màu đen, mỗi màu có một tthoong số khác nhau
+
 
     DrawText("SIGN UP SCREEN", SCREEN_WIDTH / 2 - MeasureText("SIGN UP SCREEN", 40) / 2, 100, 40, WHITE);
 
