@@ -32,11 +32,12 @@ GameState gameState = {
 };
 
 void InitSignupScreen() {
-    // Load texture directly (no need for image conversion in this case)
+    // up hình
     gameState.backgroundTexture = LoadTexture("Picture/phongxanhban.png");
     
     if (gameState.backgroundTexture.id == 0) {
         TraceLog(LOG_ERROR, "Failed to load background texture!");
+        // Hàm này có nhiệm vụ ghi lại các sự kiện, thông báo hoặc lỗi xảy ra trong quá trình chương trình chạy.
     }
 }
 
@@ -59,7 +60,7 @@ void SaveUserDataToFile(const UserData& userData) {
 }
 
 void UpdateSignupScreen() {
-    // Update error timer
+    // Cập nhật error timer
     if (gameState.showError) {
         gameState.errorTimer -= GetFrameTime();
         if (gameState.errorTimer <= 0) {
@@ -67,7 +68,7 @@ void UpdateSignupScreen() {
         }
     }
 
-    // Handle input switching
+    // xử lý chuyển đổi input
     if (IsKeyPressed(KEY_TAB)) {
         gameState.enteringUsername = !gameState.enteringUsername;
     }
@@ -77,18 +78,18 @@ void UpdateSignupScreen() {
                         gameState.userData.username : 
                         gameState.userData.password;
 
-    // Handle text input
+    // Xử ly dữ liệu text nhập vào
     if (key >= 32 && key <= 126 && strlen(currentField) < MAX_INPUT_LENGTH) {
         currentField[strlen(currentField)] = (char)key;
         currentField[strlen(currentField) + 1] = '\0';
     }
 
-    // Handle backspace
+    // Xử lý dấu backspace
     if (IsKeyPressed(KEY_BACKSPACE) && strlen(currentField) > 0) {
         currentField[strlen(currentField) - 1] = '\0';
     }
 
-    // Handle Enter key or Sign Up button click
+    // xử lý phím enter và khi ấn nút sign up
     bool trySignUp = IsKeyPressed(KEY_ENTER) || 
                     (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && 
                      CheckCollisionPointRec(GetMousePosition(), 
@@ -103,8 +104,8 @@ void UpdateSignupScreen() {
         }
         else {
             ShowError("Sign-up successful!");
+            // Lưu thông tin của người chơi nếu đăng ký thành công
 
-            // Lưu thông tin người chơi vào file sau khi đăng ký thành công
             SaveUserDataToFile(gameState.userData);
         }
     }
@@ -113,42 +114,46 @@ void UpdateSignupScreen() {
 void DrawSignupScreen() {
     ClearBackground(RAYWHITE);
     
-    // Draw background if texture was loaded successfully
+        // Vẽ background nếu texture được tải lên thành công
     if (gameState.backgroundTexture.id != 0) {
         DrawTexture(gameState.backgroundTexture, 0, 0, WHITE);
     }
 
-    // Draw title
+        // Vẽ title
     DrawText("SIGN UP SCREEN", 
              SCREEN_WIDTH/2 - MeasureText("SIGN UP SCREEN", 40)/2, 
              100, 40, BLACK);
 
-    // Draw input fields
+        // vẽ input fields
     Color usernameColor = gameState.enteringUsername ? BLUE : DARKGRAY;
     Color passwordColor = !gameState.enteringUsername ? BLUE : DARKGRAY;
 
     DrawText(TextFormat("Username: %s", gameState.userData.username), 
              100, 200, 20, usernameColor);
+             /*
+             "textformat": Đây là một thuật ngữ chung liên quan đến việc định dạng văn bản,
+             có thể bao gồm thay đổi font chữ, màu sắc, kích thước, căn chỉnh
+             */
 
     string hiddenPassword(strlen(gameState.userData.password), '*');
     DrawText(TextFormat("Password: %s", hiddenPassword.c_str()), 
              100, 250, 20, passwordColor);
 
-    // Draw Sign Up button
+    // vẽ nút sign up
     Rectangle btnBounds = {SCREEN_WIDTH/2.0f - 50, 300, 100, 40};
     DrawRectangleRec(btnBounds, BLUE);
     DrawText("Sign Up", 
              btnBounds.x + (btnBounds.width - MeasureText("Sign Up", 20))/2, 
              btnBounds.y + 10, 20, WHITE);
 
-    // Draw error message if active
+    // Thông báo lỗi 
     if (gameState.showError) {
         DrawText(gameState.errorMessage, 
                 SCREEN_WIDTH/2 - MeasureText(gameState.errorMessage, 20)/2, 
                 350, 20, RED);
     }
 
-    // Draw input field instructions
+    // Viết file đầu vào
     DrawText(gameState.enteringUsername ? "Enter Username" : "Enter Password", 
              SCREEN_WIDTH/2 - 100, 
              400, 20, DARKGRAY);
@@ -169,6 +174,11 @@ int main2() {
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
+        /*
+        WindowShouldClose là một hàm trong thư viện Raylib được sử dụng để kiểm tra 
+        xem người dùng có muốn đóng cửa sổ ứng dụng hay không. 
+        Hàm này trả về giá trị true nếu người dùng đã nhấn nút đóng cửa sổ hoặc phím ESC, 
+        và trả về false nếu không.*/
         UpdateSignupScreen();
         BeginDrawing();
         DrawSignupScreen();
