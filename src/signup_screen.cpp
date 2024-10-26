@@ -180,5 +180,3 @@ int main2() {
     return 0;
 }
 
-
-// dang test thu git hub

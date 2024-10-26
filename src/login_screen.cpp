@@ -2,42 +2,52 @@
 #include "screens.h"
 #include <string>
 #include <fstream>
+// đọc file
 #include <iostream>
 using namespace std;
 
 string username = "";
 string password = "";
 bool loggedIn = false;
-bool enteringUsername = true;  // Đang nhập vào trường username hoặc password
+bool enteringUsername = true;  // lệnh bool dùng đề đăng nhập vào trường username và password
 
-extern GameScreen currentScreen;  // Biến toàn cục cho trạng thái màn hình
 
-// Hàm kiểm tra thông tin đăng nhập từ file
+extern GameScreen currentScreen;  
+// Biến toàn cục cho trạng thái toàn màn hình, khai báo rồi có thể sử dụng nó ở các file khác mà không cần phải khai báo lại
+
+// Hàm kiểm tra thông tin đăng nhập từ file text tui tạo
 bool CheckLogin(const string& inputUsername, const string& inputPassword) {
     ifstream file("informationplayer.txt");
+    // hamf nay dùng để nhập thông tin vào 
     if (!file.is_open()) {
+        //file.is_open(): hàm này cho biết file mở lên được
+        // !file.is_open() : hàm này cho  biết file không thể mở lên được
         cout << "Could not open file!" << endl;
         return false;
     }
 
     string fileUsername, filePassword;
-    while (file >> fileUsername >> filePassword) {  // Đọc lần lượt từng username và password
+    while (file >> fileUsername >> filePassword) {  
+        // đọc lần lượ từng username và password để chek thông tin đầu vào khi đăng nhập
         if (inputUsername == fileUsername && inputPassword == filePassword) {
             file.close();
-            return true;  // Đăng nhập thành công nếu khớp
+            return true;  // đăng nhập vào thành công nếu hai thông tin khớp với file đã lưu
         }
     }
 
     file.close();
-    return false;  // Không tìm thấy thông tin đăng nhập phù hợp
+    return false;  
+    // Không tìm thấy thông tin đăng nhập phù hợp trong file đã lưu
 }
 
 // Hàm khởi tạo màn hình login
-void InitLoginScreen() {
+void InitLoginScreen() {// tên function được đặt theo file đã quy ước rồi, file pdf
     username = "";
     password = "";
     loggedIn = false;
-    enteringUsername = true;  // Mặc định nhập vào username trước
+    enteringUsername = true;     
+ // mặc đình ta sẽ vài username trước chứ ko phải password trước
+
 }
 
 // Hàm cập nhật logic màn hình login
@@ -47,17 +57,22 @@ void UpdateLoginScreen() {
     }
 
     int key = GetKeyPressed();
+    // Get key pressed (keycode), call it multiple times for keys queued, returns 0 when the queue i
     
     // Nhập thông tin từ bàn phím
-    if (key >= 32 && key <= 126) {  // Ký tự có thể in ra
+    if (key >= 32 && key <= 126) {  // Ký tự có thể in ra được
         if (enteringUsername) {
             username += (char)key;
+            /*  
+            key: Là giá trị số nguyên (int) trả về từ GetKeyPressed()
+            (char)key: Chuyển đổi (cast) giá trị số nguyên thành ký tự
+            user_name += : Thêm ký tự vào cuối chuỗi user_name*/
         } else {
             password += (char)key;
         }
     }
 
-    // Xử lý phím backspace
+    // Xử lý khi đăng nhập có phím backspace
     if (IsKeyPressed(KEY_BACKSPACE)) {
         if (enteringUsername && !username.empty()) {
             username.pop_back();
@@ -89,6 +104,7 @@ void UpdateLoginScreen() {
 // Hàm vẽ màn hình login
 void DrawLoginScreen() {
     ClearBackground(RAYWHITE);
+    //Đây là một hàm trong thư viện raylib có tác dụng xóa toàn bộ màn hình và đặt màu nền cho khung hình hiện tại.
 
     DrawText("LOGIN SCREEN", 100, 100, 40, BLACK);
 
@@ -105,6 +121,7 @@ void DrawLoginScreen() {
 
     // Vẽ nút Sign Up
     DrawRectangle(100, 300, 100, 50, LIGHTGRAY);
+    // 100, 300 là tọa độ x,y của góc trên bên trai để xác định vị trí của hình, 100,50 là chiều dài chiều rộng của hình    
     DrawText("Sign Up", 120, 315, 20, BLACK);
 
     // Hướng dẫn người chơi chuyển đổi giữa username và password
