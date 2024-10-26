@@ -2,7 +2,7 @@
 #include <cstring>
 #include <string>
 #include <stdio.h>
-
+// check coi submit chưa
 using namespace std;
 
 const int MAX_INPUT_LENGTH = 32;
@@ -55,7 +55,7 @@ void ClearUserDataFields() {
 void SaveUserDataToFile(const UserData& userData) {
     FILE *file = fopen("infoplayers.txt", "a");
     if (file != NULL) {
-        fprintf(file, "Username: %s\nPassword: %s\n\n", userData.username, userData.password);
+        fprintf(file, "%s %s\n", userData.username, userData.password);  // Đổi định dạng ghi vào file
         fclose(file);
     } else {
         ShowError("Could not save user data!");
@@ -107,8 +107,7 @@ void DrawSignupScreen() {
     ClearBackground(RAYWHITE);
 
     // Vẽ nền đen
-    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){ 0, 0, 0, 255}); // Màu đen, mỗi màu có một tthoong số khác nhau
-
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){ 0, 0, 0, 255}); // Màu đen
 
     DrawText("SIGN UP SCREEN", SCREEN_WIDTH / 2 - MeasureText("SIGN UP SCREEN", 40) / 2, 100, 40, WHITE);
 
